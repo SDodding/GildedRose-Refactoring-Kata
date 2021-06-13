@@ -28,11 +28,39 @@ class DefaultBehaviour(object):
             quality_change = -2
         self.update_quality(quality_change)
 
+class BrieBehaviour(DefaultBehaviour):
+    def tick(self):
+        self.update_sell_in()
+
+        quality_change = 1
+        if self.item.sell_in < 0:
+            quality_change *= 2
+
+        self.update_quality(quality_change)
+
+class BackstageBehaviour(DefaultBehaviour):
+    def tick(self):
+        self.update_sell_in()
+
+        quality_change = 1
+        if self.item.sell_in < 5:
+            quality_change = 3
+        elif self.item.sell_in < 10:
+            quality_change = 2
+        self.update_quality(quality_change)
+
+        if self.item.sell_in < 0:
+            self.item.quality = 0
+
+class SulfurasBehaviour(DefaultBehaviour):
+    def tick(self):
+        pass
+
 class ItemBehaviourFactory(object):
     mappings = {
-        "Aged Brie": DefaultBehaviour,
-        "Sulfuras, Hand of Ragnaros": DefaultBehaviour,
-        "Backstage passes to a TAFKAL80ETC concert": DefaultBehaviour,
+        "Aged Brie": BrieBehaviour,
+        "Sulfuras, Hand of Ragnaros": SulfurasBehaviour,
+        "Backstage passes to a TAFKAL80ETC concert": BackstageBehaviour,
         "Conjured Mana Cake": DefaultBehaviour
     }
 
