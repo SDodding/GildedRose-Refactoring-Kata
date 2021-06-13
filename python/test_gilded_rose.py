@@ -125,10 +125,10 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(38, gr.items[1].quality, "Conjured quality drops twice as fast as normal within sellby")
         gr.update_quality()
         self.assertEqual(0, gr.items[0].quality, "Conjured quality drops twice as fast as normal within sellby")
-        self.assertEqual(34, gr.items[1].quality, "Conjured quality drops twice as fast outside sellby")
+        self.assertEqual(36, gr.items[1].quality, "Conjured quality drops twice as fast as normal within sellby")
         gr.update_quality()
         self.assertEqual(0, gr.items[0].quality, "Conjured quality does not go below 0")
-        self.assertEqual(30, gr.items[1].quality, "Conjured quality drops twice as fast outside sellby")
+        self.assertEqual(32, gr.items[1].quality, "Conjured quality drops twice as fast outside sellby")
 
 
 if __name__ == '__main__':
