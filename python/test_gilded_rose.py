@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from gilded_rose import Item, GildedRose
+from gilded_rose_refactored import Item, GildedRose
 
 
 class GildedRoseTest(unittest.TestCase):
@@ -46,7 +46,7 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(0, gr.items[0].quality, "Item quality cannot go below 0 when past sellby")
         self.assertEqual(0, gr.items[1].quality, "Item quality cannot go below 0 inside sellby")
         
-    def test_quality_brie_max_constraint(self):
+    def test_quality_brie(self):
         items = [
             Item("Aged Brie", 1, 46),
         ]
