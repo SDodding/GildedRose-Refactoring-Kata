@@ -7,8 +7,8 @@ class DefaultBehaviour(object):
     def __init__(self, item):
         self.item = item
 
-    def update_sell_in(self, amount=-1):
-        self.item.sell_in += amount
+    def update_sell_in(self, delta=-1):
+        self.item.sell_in += delta
 
     def apply_quality_constraints(self):
         if self.item.quality < self.MIN_QUALITY:
@@ -16,54 +16,54 @@ class DefaultBehaviour(object):
         elif self.item.quality > self.MAX_QUALITY:
             self.item.quality = self.MAX_QUALITY
 
-    def update_quality(self, amount=-1):
-        self.item.quality += amount
+    def update_quality(self, delta=-1):
+        self.item.quality += delta
         self.apply_quality_constraints()
 
+    def apply_quality_behaviour(self):
+        quality_delta = -1 
+        if self.item.sell_in < 0:
+            quality_delta *= 2
+        self.update_quality(quality_delta)
+
     def tick(self):
         self.update_sell_in()
-
-        quality_change = -1 
-        if self.item.sell_in < 0:
-            quality_change *= 2
-        self.update_quality(quality_change)
+        self.apply_quality_behaviour() 
 
 class BrieBehaviour(DefaultBehaviour):
-    def tick(self):
-        self.update_sell_in()
-
-        quality_change = 1
+    def apply_quality_behaviour(self):
+        quality_delta = 1
         if self.item.sell_in < 0:
-            quality_change *= 2
+            quality_delta *= 2
 
-        self.update_quality(quality_change)
+        self.update_quality(quality_delta)
 
 class BackstageBehaviour(DefaultBehaviour):
-    def tick(self):
-        self.update_sell_in()
+    QUALITY_THRESH_TEN_DAYS = 10
+    QUALITY_THRESH_FIVE_DAYS = 5
 
-        quality_change = 1
-        if self.item.sell_in < 5:
-            quality_change = 3
-        elif self.item.sell_in < 10:
-            quality_change = 2
-        self.update_quality(quality_change)
-
+    def apply_quality_behaviour(self):
         if self.item.sell_in < 0:
             self.item.quality = 0
+            return
+
+        quality_delta = 1
+        if self.item.sell_in < self.QUALITY_THRESH_FIVE_DAYS:
+            quality_delta = 3
+        elif self.item.sell_in < self.QUALITY_THRESH_TEN_DAYS:
+            quality_delta = 2
+        self.update_quality(quality_delta)
 
 class SulfurasBehaviour(DefaultBehaviour):
     def tick(self):
         pass
 
 class ConjuredBehaviour(DefaultBehaviour):
-    def tick(self):
-        self.update_sell_in()
-
-        quality_change = -2
+    def apply_quality_behaviour(self):
+        quality_delta = -2
         if self.item.sell_in < 0:
-            quality_change *= 2
-        self.update_quality(quality_change)
+            quality_delta *= 2
+        self.update_quality(quality_delta)
 
 class ItemBehaviourFactory(object):
     mappings = {
@@ -81,7 +81,6 @@ class ItemBehaviourFactory(object):
         return DefaultBehaviour(item)
 
 class GildedRose(object):
-
     def __init__(self, items):
         self.items = items
 
