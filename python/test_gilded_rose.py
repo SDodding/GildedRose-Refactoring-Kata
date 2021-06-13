@@ -112,6 +112,23 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(37, gr.items[1].quality, "Quality incrases by 2 for days <= 10")
         self.assertEqual(50, gr.items[2].quality, "Quality incrases by 3 for days <= 5 and >= 0 but cannot go above 50")
 
+    def test_conjured_items(self):
+        items = [
+            Item(name="Conjured Mana Cake", sell_in=1, quality=4),
+            Item(name="Conjured Mana Cake", sell_in=2, quality=40)
+        ]
+        gr = GildedRose(items)
+
+        gr.update_quality()
+        self.assertEqual(2, gr.items[0].quality, "Conjured quality drops twice as fast as normal within sellby")
+        self.assertEqual(38, gr.items[1].quality, "Conjured quality drops twice as fast as normal within sellby")
+        gr.update_quality()
+        self.assertEqual(0, gr.items[0].quality, "Conjured quality drops twice as fast as normal within sellby")
+        self.assertEqual(34, gr.items[1].quality, "Conjured quality drops twice as fast outside sellby")
+        gr.update_quality()
+        self.assertEqual(0, gr.items[0].quality, "Conjured quality does not go below 0")
+        self.assertEqual(30, gr.items[1].quality, "Conjured quality drops twice as fast outside sellby")
+
 
 if __name__ == '__main__':
     unittest.main()
