@@ -62,27 +62,28 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(50, gr.items[0].quality, "Brie quality increases by 2 outside sellby but does not go above 50")
 
     def test_sulfuras_legendary_qualities(self):
+        QUALITY_DESCR = "Sulfuras quality is constant"
+        SELLIN_DESCR = "Sulfuras sell_in is constant"
+        SULFURAS_QUALITY = 80
+
         items = [
-            Item(name="Sulfuras, Hand of Ragnaros", sell_in=1, quality=80),
-            Item(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=40),
-            Item(name="Sulfuras, Hand of Ragnaros", sell_in=90, quality=100),
+            Item(name="Sulfuras, Hand of Ragnaros", sell_in=1, quality=SULFURAS_QUALITY),
+            Item(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=SULFURAS_QUALITY),
+            Item(name="Sulfuras, Hand of Ragnaros", sell_in=90, quality=SULFURAS_QUALITY),
         ]
         gr = GildedRose(items)
 
-        QUALITY_DESCR = "Sulfuras quality is constant"
-        SELLIN_DESCR = "Sulfuras sell_in is constant"
-
         gr.update_quality()
-        self.assertEqual(80, gr.items[0].quality, QUALITY_DESCR)
-        self.assertEqual(40, gr.items[1].quality, QUALITY_DESCR)
-        self.assertEqual(100, gr.items[2].quality, QUALITY_DESCR)
+        self.assertEqual(SULFURAS_QUALITY, gr.items[0].quality, QUALITY_DESCR)
+        self.assertEqual(SULFURAS_QUALITY, gr.items[1].quality, QUALITY_DESCR)
+        self.assertEqual(SULFURAS_QUALITY, gr.items[2].quality, QUALITY_DESCR)
         self.assertEqual(1, gr.items[0].sell_in, SELLIN_DESCR)
         self.assertEqual(-1, gr.items[1].sell_in, SELLIN_DESCR)
         self.assertEqual(90, gr.items[2].sell_in, SELLIN_DESCR)
         gr.update_quality()
-        self.assertEqual(80, gr.items[0].quality, QUALITY_DESCR)
-        self.assertEqual(40, gr.items[1].quality, QUALITY_DESCR)
-        self.assertEqual(100, gr.items[2].quality, QUALITY_DESCR)
+        self.assertEqual(SULFURAS_QUALITY, gr.items[0].quality, QUALITY_DESCR)
+        self.assertEqual(SULFURAS_QUALITY, gr.items[1].quality, QUALITY_DESCR)
+        self.assertEqual(SULFURAS_QUALITY, gr.items[2].quality, QUALITY_DESCR)
         self.assertEqual(1, gr.items[0].sell_in, SELLIN_DESCR)
         self.assertEqual(-1, gr.items[1].sell_in, SELLIN_DESCR)
         self.assertEqual(90, gr.items[2].sell_in, SELLIN_DESCR)
